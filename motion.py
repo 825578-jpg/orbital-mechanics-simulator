@@ -941,7 +941,7 @@ moon_mass = 0.000000036946227
 
 moon_earth_distance = 0.00257
 
-
+energy_to_joules = 4.4685e37
 
 verlet_total_energy = []
 euler_total_energy = []
@@ -2515,6 +2515,10 @@ while running:
         body_speed2 = body.vx**2+body.vy**2+body.vz**2
         kinetic_energy += 0.5*body.mass*body_speed2
 
+    # Format KE
+    kinetic_energy *= energy_to_joules
+
+
 
     potential_energy = 0.0
     for i in range(len(bodies)):
@@ -2527,9 +2531,9 @@ while running:
             if radius != 0:
                 potential_energy += (-G*body2.mass*body1.mass)/radius
 
+    potential_energy *= energy_to_joules
+
     total_energy = kinetic_energy + potential_energy
-    if body_selected is not None:
-        body_selected_speed = calculate_speed(body_selected)
 
 
 
@@ -2544,11 +2548,14 @@ while running:
     if baseline_total_energy is None and relative_energy_change is not None and relative_energy_change < energy_spike_threshold:
         baseline_total_energy = total_energy
 
+    previous_total_energy = total_energy
+
 
     energy_baseline_ready = baseline_total_energy is not None
 
     if energy_baseline_ready:
         total_energy_error = baseline_total_energy - total_energy
+        relative_error_percent = 100 * (total_energy_error / baseline_total_energy)
         max_energy_error = max(max_energy_error, abs(total_energy_error))
     else:
         total_energy_error = None
@@ -2599,16 +2606,18 @@ while running:
         label_surface = font.render(system_label, True, (255, 255, 255))
         # Use later for togglable comparison # distance_surface = font.render(f"Distance: {radius:.2f}", True, (255, 255, 255))
 
-        ke_surface = font.render(f"Kinetic Energy: {kinetic_energy:.2f}", True, (255, 255, 255))
-        pe_surface = font.render(f"Potential Energy: {potential_energy:.2f}", True, (255, 255, 255))
-        te_surface = font.render(f"Total Energy: {total_energy:.2f}", True, (255, 255, 255))
+        ke_surface = font.render(f"Kinetic Energy: {kinetic_energy:.4e} Joules", True, (255, 255, 255))
+        pe_surface = font.render(f"Potential Energy: {potential_energy:.4e} Joules", True, (255, 255, 255))
+        te_surface = font.render(f"Total Energy: {total_energy:.4e} Joules", True, (255, 255, 255))
 
         if total_energy_error is None:
             eer_surface = font.render(f"Baseline not trusted", True, (255, 255, 255))
+            relative_er_surface = font.render(f"Relative Error: --", True, (255, 255, 255))
             maxeer_surface = font.render(f"Max Energy Error: --", True, (255, 255, 255))
         else:
-            eer_surface = font.render(f"Energy Error: {total_energy_error:.5f}", True, (255, 255, 255))
-            maxeer_surface = font.render(f"Max Energy Error: {max_energy_error:.5f}", True, (255, 255, 255))
+            eer_surface = font.render(f"Energy Error: {total_energy_error:.5e} Joules", True, (255, 255, 255))
+            relative_er_surface = font.render(f"Relative Error: {relative_error_percent:.3e}%", True, (255, 255, 255))
+            maxeer_surface = font.render(f"Max Energy Error: {max_energy_error:.5e} Joules", True, (255, 255, 255))
 
 
 
@@ -2619,8 +2628,9 @@ while running:
             screen.blit(ke_surface, (20, 80))
             screen.blit(pe_surface, (20, 110))
             screen.blit(te_surface, (20, 140))
-            screen.blit(eer_surface, (20, 170))
-            screen.blit(maxeer_surface, (20, 200))
+            screen.blit(eer_surface, (20, 200))
+            screen.blit(relative_er_surface, (20, 230))
+            screen.blit(maxeer_surface, (20, 260))
 
 
 
