@@ -1746,7 +1746,7 @@ def draw_body_placement():
 
 
 def finish_body_placement():
-    global settings_under_review, placing_body, vectors_toggled, paused
+    global settings_under_review, placing_body, vectors_toggled, paused, body_selected
 
     mass_input_box.commit()
     if placed_body_primary is not None:
@@ -1770,6 +1770,8 @@ def finish_body_placement():
     update_camera_target_list()
 
     assign_radius_scales([new_body])
+    if body_selected is None:
+        body_selected = new_body
 
     settings_under_review = False
     placing_body = False
