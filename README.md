@@ -68,6 +68,9 @@ World-space coordinates are transformed relative to an orbiting camera and proje
 Users can create new bodies interactively by selecting a position, assigning a velocity vector,
 and configuring properties such as mass, name, color, distance from the primary body, and orbital-plane alignment.
 
+### Full Demonstration
+
+[▶ Watch the full Orbital Mechanics Simulator demonstration](https://youtu.be/Ilg3BMBFPUw)
 
 ## About
 This project began as an exploration of orbital mechanics and grew into a general-purpose interactive physics sandbox.
