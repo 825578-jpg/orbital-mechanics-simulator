@@ -1746,12 +1746,11 @@ def draw_body_placement():
 
 
 def finish_body_placement():
-    global settings_under_review, placing_body, vectors_toggled, paused, body_selected
+    global settings_under_review, placing_body, vectors_toggled, paused, body_selected, camera_target_is_com
 
     mass_input_box.commit()
     if placed_body_primary is not None:
         distance_input_box.commit()
-        update_placed_body_distance()
 
     placed_body_color = (red_color_slider.value, green_color_slider.value, blue_color_slider.value)
     placed_body_trail_color = (red_trail_color_slider.value, green_trail_color_slider.value, blue_trail_color_slider.value)
